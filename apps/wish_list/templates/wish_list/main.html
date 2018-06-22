@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <h1 class="navbar-brand">Wish List</h1>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarText">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item active">
+                    <a class="nav-link" href="/home">Home <span class="sr-only">(current)</span></a>
+                </li>
+            </ul>
+            <span class="navbar-text" style='margin-right: 15px;'><a href='/logout'>Log Out</a></span>
+        </div>
+    </nav>
+    <div class='container'>
+        <div class='container'>
+            <h1 style="margin: 25px;">Hello, {{me.name}}!</h1>
+        </div>
+        <div class='container'>
+            <h3>Your Wish List:</h3>
+            <table class="table table-striped table-dark">
+                <thead>
+                  <tr>
+                    <th scope="col">Item</th>
+                    <th scope="col">Added By</th>
+                    <th scope="col">Date Added</th>
+                    <th scope="col">Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                    {%for item in items%}
+                        {%if item.added_by_id == me.id%}
+                        <tr>
+                            <th><a href='wish_item/{{item.id}}'>{{item.name}}</a></th>
+                            <td>{{item.added_by.name}}</td>
+                            <td>{{item.created_at}}</td>
+                            <td>
+                                <form action='/delete' method='post'>
+                                    {%csrf_token%}
+                                    <input type='hidden'name='item_id' value='{{item.id}}'>
+                                    <button type="subit" class="btn btn-danger">Delete</button>
+                                </form>
+                            </td>
+                        </tr>
+                        {%endif%}
+                    {%endfor%}
+                    {%for object in me.liked_item.all%}
+                        <tr>
+                            <th><a href='wish_item/{{object.id}}'>{{object.name}}</a></th>
+                            <td>{{object.added_by.name}}</td>
+                            <td>{{object.created_at}}</td>
+                            <td>
+                                <form action='/remove' method='post'>
+                                        {%csrf_token%}
+                                        <input type='hidden'name='item_id' value='{{object.id}}'>
+                                        <button type="subit" class="btn btn-secondary">Remove from Wish List</button>
+                                </form>
+                            </td>
+                        </tr>
+                    {%endfor%}
+                </tbody>
+            </table>
+        </div>
+        <div class='container'>
+            <h3>Other Users' Wishes:</h3>
+            <table class="table table-striped table-dark">
+                <thead>
+                    <tr>
+                        <th scope="col">Item</th>
+                        <th scope="col">Added By</th>
+                        <th scope="col">Date Added</th>
+                        <th scope="col">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in otheritems%}
+                        {% if me.id != item.added_by.id %}
+                            <tr>
+                                <th scope=><a href='wish_item/{{item.id}}'>{{item.name}}</a></th>
+                                <td>{{item.added_by.name}}</td>
+                                <td>{{item.created_at}}</td>
+                                <td>
+                                    <form action='like' method='post'>
+                                        {%csrf_token%}
+                                        <input type='hidden'name='item_id' value='{{item.id}}'>
+                                        <button type="subit" class="btn btn-secondary">Add to Wish List</button>
+                                    </form>
+                            </tr>
+                        {%endif%}
+                    {%endfor%}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="container" style="display: flex; justify-content: flex-end; padding:25px; font-size: 24px;">
+        <a href="/addItem">Add Item</a>
+    </div>
+</body>
+</html>

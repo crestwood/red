@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <h1 class="navbar-brand">Wish List</h1>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarText">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item active">
+                    <a class="nav-link" href="/home">Home <span class="sr-only">(current)</span></a>
+                </li>
+            </ul>
+            <span class="navbar-text" style='margin-right: 15px;'><a href='/logout'>Log Out</a></span>
+        </div>
+    </nav>
+    <div class="container">
+        <div class="container">
+            <h1>Add a New Item:</h1>
+        </div>
+        <div class='container'>
+            {% if messages %}
+                {% for message in messages %}
+                    <p style="color:red">{{ message }}</p>
+                {% endfor %}
+            {% endif %}
+            <form action='/create' method='post'>
+                {%csrf_token%}
+                <table class="table table-borderless">
+                    <tbody>
+                        <tr>
+                            <td style=>Item:</td>
+                            <td><input name='item' type="text" class="form-control"></td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div class="container" style="display: flex; justify-content: center;">
+                    <button type="submit" class="btn btn-success">Add Item</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</body>
+</html>
